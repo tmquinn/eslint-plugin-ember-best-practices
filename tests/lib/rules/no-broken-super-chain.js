@@ -12,6 +12,23 @@ ruleTester.run('no-broken-super-chain', rule, {
           init() {
             this._super(...arguments);
             this.alias = this.concrete;
+          },
+          somethingNotInit() {
+            this.alias = this.concrete;
+          }
+
+        });`,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module'
+      }
+    },
+    {
+      code: `
+        export default Ember.Component({
+          somethingNotInit() {
+            this._super(...arguments);
+            this.alias = this.concrete;
           }
         });`,
       parserOptions: {
