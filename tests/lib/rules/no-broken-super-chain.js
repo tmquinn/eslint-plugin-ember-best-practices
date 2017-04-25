@@ -8,7 +8,7 @@ ruleTester.run('no-broken-super-chain', rule, {
   valid: [
     {
       code: `
-        export default Ember.Component({
+        export default Ember.Component.extend({
           init() {
             this._super(...arguments);
             this.alias = this.concrete;
@@ -25,9 +25,29 @@ ruleTester.run('no-broken-super-chain', rule, {
     },
     {
       code: `
-        export default Ember.Component({
-          somethingNotInit() {
+        export default Ember.Component.extend({
+          init() {
+            function foo () {
+              return true;
+            }
+
             this._super(...arguments);
+            this.alias = this.concrete;
+          },
+          somethingNotInit() {
+            this.alias = this.concrete;
+          }
+
+        });`,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module'
+      }
+    },
+    {
+      code: `
+        export default Ember.Service.extend({
+          init() {
             this.alias = this.concrete;
           }
         });`,
@@ -40,7 +60,7 @@ ruleTester.run('no-broken-super-chain', rule, {
   invalid: [
     {
       code: `
-        export default Ember.Component({
+        export default Ember.Component.extend({
           init() {
             this.alias = this.concrete;
           }
@@ -55,7 +75,7 @@ ruleTester.run('no-broken-super-chain', rule, {
     },
     {
       code: `
-        export default Ember.Component({
+        export default Ember.Component.extend({
           init() {
             this.alias = this.concrete;
             this._super(...arguments);
@@ -71,7 +91,7 @@ ruleTester.run('no-broken-super-chain', rule, {
     },
     {
       code: `
-        export default Ember.Component({
+        export default Ember.Component.extend({
           init() {
             this._super(...arguments);
             this.alias = this.concrete;
