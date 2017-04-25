@@ -1,7 +1,7 @@
 const rule = require('../../../lib/rules/no-broken-super-chain');
 const RuleTester = require('eslint').RuleTester;
 
-const { noSuper, noThisBeforeSuper, tooManySupers } = rule.meta.messages;
+const { noSuper, tooManySupers } = rule.meta.messages;
 const ruleTester = new RuleTester();
 
 ruleTester.run('no-broken-super-chain', rule, {
@@ -17,6 +17,19 @@ ruleTester.run('no-broken-super-chain', rule, {
             this.alias = this.concrete;
           }
 
+        });`,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module'
+      }
+    },
+    {
+      code: `
+        export default Ember.Route.extend({
+          init() {
+            this._super(...arguments);
+            this.get('foo');
+          }
         });`,
       parserOptions: {
         ecmaVersion: 6,
@@ -90,7 +103,7 @@ ruleTester.run('no-broken-super-chain', rule, {
     //         this.alias = this.concrete;
     //       }
     //     });
-
+    //
     //     export default foo;`,
     //   parserOptions: {
     //     ecmaVersion: 6,
@@ -104,6 +117,21 @@ ruleTester.run('no-broken-super-chain', rule, {
         export default Ember.Component.extend({
           init() {
             this.alias = this.concrete;
+          }
+        });`,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module'
+      },
+      errors: [{
+        message: noSuper
+      }]
+    },
+    {
+      code: `
+        export default Ember.Route.extend({
+          init() {
+            this.get('foo');
           }
         });`,
       parserOptions: {
