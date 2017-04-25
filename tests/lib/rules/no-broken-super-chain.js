@@ -55,7 +55,48 @@ ruleTester.run('no-broken-super-chain', rule, {
         ecmaVersion: 6,
         sourceType: 'module'
       }
+    },
+    {
+      code: `
+        export default Ember.Component.extend({
+          didInsertElement() {
+            this.updateBlurHandler(true);
+          }
+        });`,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module'
+      }
+    },
+    {
+      code: `
+        export default MyComponent.extend({
+          didInsertElement() {
+            this._super(...arguments);
+            this.updateBlurHandler(true);
+          }
+        });`,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module'
+      }
     }
+    // TODO: post mvp
+    // {
+    //   code: `
+    //     const foo = Ember.Component.extend({
+    //       init() {
+    //         this._super(...arguments);'
+    //         this.alias = this.concrete;
+    //       }
+    //     });
+
+    //     export default foo;`,
+    //   parserOptions: {
+    //     ecmaVersion: 6,
+    //     sourceType: 'module'
+    //   }
+    // }
   ],
   invalid: [
     {
@@ -73,22 +114,37 @@ ruleTester.run('no-broken-super-chain', rule, {
         message: noSuper
       }]
     },
-    {
-      code: `
-        export default Ember.Component.extend({
-          init() {
-            this.alias = this.concrete;
-            this._super(...arguments);
-          }
-        });`,
-      parserOptions: {
-        ecmaVersion: 6,
-        sourceType: 'module'
-      },
-      errors: [{
-        message: noThisBeforeSuper
-      }]
-    },
+    // TODO: post mvp
+    // {
+    //   code: `
+    //     export default Ember.Component.extend({
+    //       init() {
+    //         this._super(); // missing '...arguments'
+    //         this.alias = this.concrete;
+    //       }
+    //     });`,
+    //   parserOptions: {
+    //     ecmaVersion: 6,
+    //     sourceType: 'module'
+    //   }
+    // },
+    // TODO: post mvp
+    // {
+    //   code: `
+    //     export default Ember.Component.extend({
+    //       init() {
+    //         this.alias = this.concrete;
+    //         this._super(...arguments);
+    //       }
+    //     });`,
+    //   parserOptions: {
+    //     ecmaVersion: 6,
+    //     sourceType: 'module'
+    //   },
+    //   errors: [{
+    //     message: noThisBeforeSuper
+    //   }]
+    // },
     {
       code: `
         export default Ember.Component.extend({
@@ -106,6 +162,21 @@ ruleTester.run('no-broken-super-chain', rule, {
         message: tooManySupers
       }]
     }
-
+    // TODO: post mvp
+    // {
+    //   code: `
+    //     export default MyComponent.extend({
+    //       didInsertElement() {
+    //         this.updateBlurHandler(true);
+    //       }
+    //     });`,
+    //   parserOptions: {
+    //     ecmaVersion: 6,
+    //     sourceType: 'module'
+    //   },
+    //   errors: [{
+    //     message: noSuper
+    //   }]
+    // }
   ]
 });
