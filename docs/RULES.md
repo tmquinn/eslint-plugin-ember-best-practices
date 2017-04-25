@@ -1,3 +1,3 @@
 ## Table of contents:
 
-* [`no-unbroken-super-chain`](./rules/no-unbroken-super-chain.md)
+* [`no-broken-super-chain`](./rules/no-broken-super-chain.md)
