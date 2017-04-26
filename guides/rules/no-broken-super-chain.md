@@ -1,6 +1,6 @@
-## Don't break the super chain
+# Don't break the super chain
 
-### Rule name: `no-broken-super-chain`
+## Rule name: `no-broken-super-chain`
 
 If you are overriding the `init` lifecycle hook in Ember modules like Component, Mixin, etc. it is necessary that you include a call to `_super`
 

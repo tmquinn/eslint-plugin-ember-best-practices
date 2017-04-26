@@ -16,7 +16,6 @@ ruleTester.run('no-broken-super-chain', rule, {
           somethingNotInit() {
             this.alias = this.concrete;
           }
-
         });`,
       parserOptions: {
         ecmaVersion: 6,
@@ -43,14 +42,12 @@ ruleTester.run('no-broken-super-chain', rule, {
             function foo () {
               return true;
             }
-
             this._super(...arguments);
             this.alias = this.concrete;
           },
           somethingNotInit() {
             this.alias = this.concrete;
           }
-
         });`,
       parserOptions: {
         ecmaVersion: 6,
@@ -93,23 +90,22 @@ ruleTester.run('no-broken-super-chain', rule, {
         ecmaVersion: 6,
         sourceType: 'module'
       }
+    },
+    {
+      code: `
+        const foo = Ember.Component.extend({
+          init() {
+            this._super(...arguments);
+            this.alias = this.concrete;
+          }
+        });
+
+        export default foo;`,
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: 'module'
+      }
     }
-    // TODO: post mvp
-    // {
-    //   code: `
-    //     const foo = Ember.Component.extend({
-    //       init() {
-    //         this._super(...arguments);'
-    //         this.alias = this.concrete;
-    //       }
-    //     });
-    //
-    //     export default foo;`,
-    //   parserOptions: {
-    //     ecmaVersion: 6,
-    //     sourceType: 'module'
-    //   }
-    // }
   ],
   invalid: [
     {
@@ -142,7 +138,7 @@ ruleTester.run('no-broken-super-chain', rule, {
         message: noSuper
       }]
     },
-    // TODO: post mvp
+    // TODO
     // {
     //   code: `
     //     export default Ember.Component.extend({
@@ -156,7 +152,7 @@ ruleTester.run('no-broken-super-chain', rule, {
     //     sourceType: 'module'
     //   }
     // },
-    // TODO: post mvp
+    // TODO
     // {
     //   code: `
     //     export default Ember.Component.extend({
@@ -190,7 +186,7 @@ ruleTester.run('no-broken-super-chain', rule, {
         message: tooManySupers
       }]
     }
-    // TODO: post mvp
+    // TODO
     // {
     //   code: `
     //     export default MyComponent.extend({
